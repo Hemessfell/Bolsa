@@ -8,25 +8,20 @@ public class EncaixeScript : MonoBehaviour
     public string objetocerto;
     public bool cheio;
     private GameObject objetoencaixado;
-    private bool podeencaixar;
+    public enum States { peçaNormal, peçaFonte};
+    public States myStates;
 
 
     // Start is called before the first frame update
     void Start()
     {
        cheio = false;
-        podeencaixar = true;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
 
-
-        print(objetoencaixado);
-    
-        
     }
 
 

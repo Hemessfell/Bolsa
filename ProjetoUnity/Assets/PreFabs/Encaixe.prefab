@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6808519806253269627}
   m_Layer: 7
   m_Name: Encaixe
-  m_TagString: Untagged
+  m_TagString: Encaixe
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -114,3 +114,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd0d42da225626c4cbe80308a0486c10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  objetocerto: 
+  cheio: 0

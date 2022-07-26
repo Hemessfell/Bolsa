@@ -10,6 +10,8 @@ public class PecaFonteScript : MonoBehaviour
 
     private bool tocou;
 
+    public bool isGlued;
+
     public GameObject camera;
 
     public float peca_x;
@@ -48,20 +50,24 @@ public class PecaFonteScript : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collider)
     {
-
-        if (collider.gameObject.layer == 8)
+        if (collider.CompareTag("Encaixe") && collider.gameObject.GetComponent<EncaixeScript>().myStates == EncaixeScript.States.peçaFonte)
         {
-
             peca_x = collider.gameObject.transform.position.x;
             peca_y = collider.gameObject.transform.position.y;
             peca_z = collider.gameObject.transform.position.z;
 
-            this.gameObject.transform.position = new Vector3(peca_x, peca_y, peca_z);
+            gameObject.transform.position = new Vector3(peca_x, peca_y, peca_z);
             tocou = true;
+            isGlued = true;
         }
-        //print(collider.gameObject);
+    }
 
-
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.gameObject.layer == 7 && isGlued)
+        {
+            isGlued = false;
+        }
     }
 }
 

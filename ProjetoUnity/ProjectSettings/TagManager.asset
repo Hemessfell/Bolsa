@@ -3,17 +3,19 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Encaixe
+  - "Pe\xE7aFonte"
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Drag
   - Water
   - UI
-  - Drag
-  - Peca
   - fonte
+  - Encaixe
+  - 
   - 
   - 
   - 
