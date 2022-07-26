@@ -34,6 +34,7 @@ public class UIManager : MonoBehaviour
         }
 
         DontDestroyOnLoad(gameObject);
+	canClickOnPieces = true;
     }
     #endregion
 
