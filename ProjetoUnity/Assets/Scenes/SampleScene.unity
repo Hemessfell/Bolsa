@@ -1134,7 +1134,7 @@ MonoBehaviour:
   obj: {fileID: 0}
   layer:
     serializedVersion: 2
-    m_Bits: 136
+    m_Bits: 8
   cursorTexture: {fileID: 2800000, guid: d21cf63df88db2d4fb8faf929325705f, type: 3}
 --- !u!1 &662042367
 GameObject:
