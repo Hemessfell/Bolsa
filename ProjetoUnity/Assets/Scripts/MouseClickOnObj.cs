@@ -7,17 +7,6 @@ using TMPro;
 
 public class MouseClickOnObj : MonoBehaviour
 {
-    //TEXTOS EXIBIDOS
-    public TextMeshProUGUI texto_trabalho, texto_Qq, texto_Qf, texto_N;
-
-    //VARIAVEIS ALTERAVEIS
-
-    private int trabalho;
-    private int qqcalor;
-    private int qfcalor;
-    private int rendimento;
-    
-
     //MOUSE
     [SerializeField] private Transform obj;
 
@@ -39,12 +28,6 @@ public class MouseClickOnObj : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //DEFININDO O CALOR, RENDIMENTO E TRABALHO
-        trabalho = 12;
-        rendimento = 20;
-        qfcalor = 48;
-        qqcalor = 60;
-      
         cursorHotspot = new Vector2(cursorTexture.width / 2, cursorTexture.height /2);
         Cursor.SetCursor(cursorTexture, cursorHotspot,CursorMode.Auto);
     }
@@ -52,11 +35,6 @@ public class MouseClickOnObj : MonoBehaviour
     // Update is called once per frame
     void Update()
     { 
-        texto_trabalho.text = "W: " + trabalho + "j";
-        texto_Qq.text = "Qq: " + qqcalor + "j";
-        texto_Qf.text = "Qf: " + qfcalor + "j";
-        texto_N.text = "N: " + rendimento + "%";
-
         _mouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         hit = Physics2D.Raycast(_mouse,Vector2.zero,0f, layer);
 

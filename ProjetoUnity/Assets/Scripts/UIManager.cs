@@ -8,6 +8,8 @@ public class UIManager : MonoBehaviour
 {
     [SerializeField] private GameObject popUpPanel;
 
+    public TextMeshProUGUI texto_trabalho, texto_Qq, texto_Qf, texto_N;
+
     public bool canClickOnPieces;
     private bool canClickOnPopUp;
 
@@ -52,7 +54,7 @@ public class UIManager : MonoBehaviour
         }
         else
         {
-            if (!MachineManager.Instance.AreAllSourcePiecesGlued())
+            if (!MachineManager.Instance.IsThereASourcePieceGlued())
             {
                 popUpPanel.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = "<color=\"red\">" + "Você Precisa Anexar a Peça Fonte!" + "</color>";
                 Debug.Log("glue source piece");
@@ -61,12 +63,21 @@ public class UIManager : MonoBehaviour
 
             if (MachineManager.Instance.AreAllPiecesCorrectlyPlaced())
             {
-                popUpPanel.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = "<color=\"green\">" + "Você Acertou!" + "</color>";
+                string text = "";
+
+                if(MachineManager.Instance.SourcePieceName() == "Carvão")
+                    text = "<color=\"green\">" + "A Máquina Ligou!" + "</color>";
+                else if(MachineManager.Instance.SourcePieceName() == "Lenha")
+                    text = "<color=\"red\">" + "Fonte de Calor Fraca. A Máquina Não Ligou!" + "</color>";
+                else if(MachineManager.Instance.SourcePieceName() == "Oil")
+                    text = "<color=\"red\">" + "Fonte de Calor Muito Forte. A Máquina Quebrou!" + "</color>";
                 Debug.Log("youre right");
+
+                popUpPanel.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = text;
             }
             else
             {
-                popUpPanel.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = "<color=\"red\">" + "Você Errou!" + "</color>";
+                popUpPanel.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text = "<color=\"red\">" + "Você Errou A Ordem das Peças!" + "</color>";
                 Debug.Log("youre wrong");
             }
         }

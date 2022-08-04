@@ -75,21 +75,42 @@ public class MachineManager : MonoBehaviour
         return allGlued;
     }
 
-    public bool AreAllSourcePiecesGlued()
+    public bool IsThereASourcePieceGlued()
     {
-        bool allGlued = new bool();
+        bool isGlued = new bool();
 
         for (int i = 0; i < pecasFonte.Count; i++)
         {
-            if (!pecasFonte[i].isGlued)
+            if (pecasFonte[i].isGlued)
             {
-                allGlued = false;
+                isGlued = true;
                 break;
             }
             else
-                allGlued = true;
+                isGlued = false;
         }
 
-        return allGlued;
+        return isGlued;
+    }
+
+    public string SourcePieceName()
+    {
+        string name = "";
+
+        if (IsThereASourcePieceGlued())
+        {
+            for (int i = 0; i < pecasFonte.Count; i++)
+            {
+                if (pecasFonte[i].isGlued)
+                {
+                    name = pecasFonte[i].name;
+                    break;
+                }
+                else
+                    name = "";
+            }
+        }
+
+        return name;
     }
 }

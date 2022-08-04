@@ -5,14 +5,11 @@ using UnityEngine.UI;
 
 public class PecaFonteScript : MonoBehaviour
 {
-
     public GameObject peca;
 
     private bool tocou;
 
     public bool isGlued;
-
-    public GameObject camera;
 
     public float peca_x;
 
@@ -20,41 +17,42 @@ public class PecaFonteScript : MonoBehaviour
 
     public float peca_z;
 
-    // Start is called before the first frame update
+    [SerializeField] private Values[] values; 
+
     void Start()
     {
         tocou = false;
-
-
     }
 
-    // Update is called once per frame
     void Update()
     {
-        //print(tocou);
-
         if (Input.GetMouseButtonDown(0))
         {
             tocou = false;
         }
         else
         {
-
             if (tocou == true)
             {
-                this.gameObject.transform.position = new Vector3(peca_x, peca_y, peca_z);
+                gameObject.transform.position = new Vector3(peca_x, peca_y, peca_z);
             }
         }
-
     }
 
     void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collider.CompareTag("Encaixe") && collider.gameObject.GetComponent<EncaixeScript>().myStates == EncaixeScript.States.peçaFonte)
+        if (collider.CompareTag("Encaixe") && collider.gameObject.GetComponent<EncaixeScript>().myStates == EncaixeScript.States.peçaFonte && !MachineManager.Instance.IsThereASourcePieceGlued())
         {
             peca_x = collider.gameObject.transform.position.x;
             peca_y = collider.gameObject.transform.position.y;
             peca_z = collider.gameObject.transform.position.z;
+
+            int valuesIndex = Random.Range(0, values.Length);
+
+            UIManager.Instance.texto_trabalho.text = values[valuesIndex].values[0];
+            UIManager.Instance.texto_Qq.text = values[valuesIndex].values[1];
+            UIManager.Instance.texto_Qf.text = values[valuesIndex].values[2];
+            UIManager.Instance.texto_N.text = values[valuesIndex].values[3];
 
             gameObject.transform.position = new Vector3(peca_x, peca_y, peca_z);
             tocou = true;
@@ -67,7 +65,16 @@ public class PecaFonteScript : MonoBehaviour
         if (other.gameObject.layer == 7 && isGlued)
         {
             isGlued = false;
+            UIManager.Instance.texto_trabalho.text = "W:";
+            UIManager.Instance.texto_Qq.text = "Qq:";
+            UIManager.Instance.texto_Qf.text = "Qf:";
+            UIManager.Instance.texto_N.text = "N:";
         }
     }
-}
 
+    [System.Serializable]
+    public class Values
+    {
+        public string[] values; 
+    }
+}
