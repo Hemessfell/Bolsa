@@ -8,7 +8,7 @@ public class PecaScript : MonoBehaviour
 
     public GameObject peca, myCamera;
 
-    private GameObject encaixe;
+    public GameObject encaixe;
 
     public string nome;
 
@@ -62,6 +62,8 @@ public class PecaScript : MonoBehaviour
                 cheio_encaixe = true;
                 encaixe.GetComponent<EncaixeScript>().cheio = cheio_encaixe;
                 colado = true;
+                encaixe.GetComponent<EncaixeScript>().objetoencaixado = gameObject;
+                encaixe.GetComponent<EncaixeScript>().SetSpriteAndQuestionMark(false);
 
                 if (nome == nome_encaixe)
                 {
@@ -82,6 +84,7 @@ public class PecaScript : MonoBehaviour
         {
             colado = false;
             encaixe.GetComponent<EncaixeScript>().cheio = false;
+            encaixe.GetComponent<EncaixeScript>().SetSpriteAndQuestionMark(true);
             isRight = false;
         }
     }

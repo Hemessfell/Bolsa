@@ -42,8 +42,8 @@ public class UIManager : MonoBehaviour
 
     public void PlayButtonMethod()
     {
-        popUpPanel.transform.DOLocalMoveY(-75.0f, 0.75f);
-        popUpPanel.transform.DOLocalMoveY(0.0f, 0.25f).SetDelay(0.75f);
+        popUpPanel.transform.DOLocalMoveY(-75.0f, 0.75f).SetUpdate(true);
+        popUpPanel.transform.DOLocalMoveY(0.0f, 0.25f).SetDelay(0.75f).SetUpdate(true);
         canClickOnPieces = false;
         canClickOnPopUp = true;
 
@@ -85,7 +85,8 @@ public class UIManager : MonoBehaviour
 
     public void RectractButtonMethod()
     {
-        popUpPanel.transform.DOLocalMoveY(787.0f, 0.75f).OnComplete(() => canClickOnPieces = true);
+        popUpPanel.transform.DOLocalMoveY(787.0f, 0.75f).OnComplete(() => canClickOnPieces = true).SetUpdate(true);
         canClickOnPopUp = false;
+        Time.timeScale = 1.0f;
     }
 }

@@ -7,26 +7,47 @@ public class EncaixeScript : MonoBehaviour
 
     public string objetocerto;
     public bool cheio;
-    private GameObject objetoencaixado;
+    public GameObject objetoencaixado;
+
+    private SpriteRenderer spr;
+
     public enum States { peçaNormal, peçaFonte};
     public States myStates;
 
+    private void Awake()
+    {
+        spr = GetComponent<SpriteRenderer>();
+    }
 
-    // Start is called before the first frame update
     void Start()
     {
        cheio = false;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerExit2D(Collider2D collision)
     {
-
+        if(collision.gameObject == objetoencaixado)
+        {
+            cheio = false;
+            objetoencaixado = null;
+        }
     }
 
-
-    void OnTriggerEnter2D(Collider2D collider)
+    private void OnTriggerStay2D(Collider2D collision)
     {
-        objetoencaixado = collider.gameObject;
+        if(objetoencaixado != null)
+        {
+            cheio = true;
+        }
+        else
+        {
+            cheio = false;
+        }
+    }
+
+    public void SetSpriteAndQuestionMark(bool state)
+    {
+        spr.enabled = state;
+        transform.GetChild(0).gameObject.SetActive(state);
     }
 }

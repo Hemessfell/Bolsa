@@ -7,6 +7,8 @@ public class MachineManager : MonoBehaviour
     private List<PecaScript> peças = new List<PecaScript>();
     private List<PecaFonteScript> pecasFonte = new List<PecaFonteScript>();
 
+    public List<Animator> adicionalAnimators;
+
     #region Singleton Logic
     private static MachineManager instance;
     public static MachineManager Instance
@@ -52,6 +54,26 @@ public class MachineManager : MonoBehaviour
             }
             else
                 allCorrect = true;
+        }
+
+        if (allCorrect == true && SourcePieceName() == "Carvão")
+        {
+            for (int i = 0; i < peças.Count; i++)
+            {
+                Animator anim = peças[i].gameObject.GetComponent<Animator>();
+
+                if(anim != null)
+                {
+                    anim.SetTrigger("Play");
+                }
+            }
+
+            for (int i = 0; i < adicionalAnimators.Count; i++)
+            {
+                adicionalAnimators[i].SetTrigger("Play");
+            }
+
+            Time.timeScale = 0.0f;
         }
 
         return allCorrect;
