@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class MachineManager : MonoBehaviour
 {
@@ -8,6 +9,9 @@ public class MachineManager : MonoBehaviour
     private List<PecaFonteScript> pecasFonte = new List<PecaFonteScript>();
 
     public List<Animator> adicionalAnimators;
+
+    public bool machineIsFunctioning;
+    private bool canUpdatePathSlider;
 
     #region Singleton Logic
     private static MachineManager instance;
@@ -26,12 +30,7 @@ public class MachineManager : MonoBehaviour
         if(instance == null)
         {
             instance = this;
-        }else if(instance != this)
-        {
-            Destroy(gameObject);
         }
-
-        DontDestroyOnLoad(gameObject);
     }
     #endregion
 
@@ -41,20 +40,10 @@ public class MachineManager : MonoBehaviour
         pecasFonte.AddRange(FindObjectsOfType<PecaFonteScript>());
     }
 
+    #region FirstMachine
     public bool AreAllPiecesCorrectlyPlaced()
     {
-        bool allCorrect = new bool();
-
-        for (int i = 0; i < peças.Count; i++)
-        {
-            if (peças[i].isRight == false)
-            {
-                allCorrect = false;
-                break;
-            }
-            else
-                allCorrect = true;
-        }
+        bool allCorrect = peças.All(p => p.isRight == true);
 
         if (allCorrect == true && SourcePieceName() == "Carvão")
         {
@@ -65,12 +54,14 @@ public class MachineManager : MonoBehaviour
                 if(anim != null)
                 {
                     anim.SetTrigger("Play");
+                    anim.speed = 1.0f;
                 }
             }
 
             for (int i = 0; i < adicionalAnimators.Count; i++)
             {
                 adicionalAnimators[i].SetTrigger("Play");
+                adicionalAnimators[i].speed = 1.0f;
             }
 
             Time.timeScale = 0.0f;
@@ -79,40 +70,34 @@ public class MachineManager : MonoBehaviour
         return allCorrect;
     }
 
-    public bool AreAllPiecesGlued()
+    public void StopMachine()
     {
-        bool allGlued = new bool();
-
         for (int i = 0; i < peças.Count; i++)
         {
-            if (peças[i].colado == false)
+            Animator anim = peças[i].gameObject.GetComponent<Animator>();
+
+            if (anim != null)
             {
-                allGlued = false;
-                break;
+                anim.speed = 0.0f;
             }
-            else
-                allGlued = true;
         }
 
-        return allGlued;
+        for (int i = 0; i < adicionalAnimators.Count; i++)
+        {
+            adicionalAnimators[i].speed = 0.0f;
+        }
+
+        machineIsFunctioning = false;
+    }
+
+    public bool AreAllPiecesGlued()
+    {
+        return peças.All(p => p.colado == true);
     }
 
     public bool IsThereASourcePieceGlued()
     {
-        bool isGlued = new bool();
-
-        for (int i = 0; i < pecasFonte.Count; i++)
-        {
-            if (pecasFonte[i].isGlued)
-            {
-                isGlued = true;
-                break;
-            }
-            else
-                isGlued = false;
-        }
-
-        return isGlued;
+        return pecasFonte.Any(p => p.isGlued == true);
     }
 
     public string SourcePieceName()
@@ -121,18 +106,30 @@ public class MachineManager : MonoBehaviour
 
         if (IsThereASourcePieceGlued())
         {
-            for (int i = 0; i < pecasFonte.Count; i++)
-            {
-                if (pecasFonte[i].isGlued)
-                {
-                    name = pecasFonte[i].name;
-                    break;
-                }
-                else
-                    name = "";
-            }
+            name = pecasFonte.FirstOrDefault(p => p.isGlued).name;
         }
 
         return name;
     }
+    #endregion
+
+    #region Train
+    public void PlayTrainAnimation()
+    {
+        GetComponent<Animator>().SetBool("isFunctioning", true);
+        transform.GetChild(0).GetChild(0).GetChild(0).gameObject.SetActive(false);
+        transform.GetChild(0).GetChild(0).gameObject.GetComponent<SpriteRenderer>().enabled = false;
+        transform.GetChild(0).GetChild(0).GetChild(1).gameObject.SetActive(true);
+        UIManager.Instance.canUpdatePathSlider = true;
+    }
+
+    public void StopTrainAnimation()
+    {
+        GetComponent<Animator>().SetBool("isFunctioning", false);
+        transform.GetChild(0).GetChild(0).GetChild(0).gameObject.SetActive(true);
+        transform.GetChild(0).GetChild(0).GetChild(1).gameObject.SetActive(false);
+        transform.GetChild(0).GetChild(0).gameObject.GetComponent<SpriteRenderer>().enabled = true;
+        UIManager.Instance.canUpdatePathSlider = false;
+    }
+    #endregion
 }

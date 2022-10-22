@@ -28,14 +28,35 @@ public class SceneLoadEvent : MonoBehaviour
         }
 
         DontDestroyOnLoad(gameObject);
-
-        SceneManager.sceneLoaded += OnSceneLoad;
     }
     #endregion
 
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoad;
+    }
+
     private void OnSceneLoad(Scene scene, LoadSceneMode loadSceneMode)
     {
-        
+        if (scene.name.Contains("Level"))
+        {
+            string text = "";
+            UIManager.Instance.PlayButtonMethod(50);
+
+            if (scene.name.StartsWith("First"))
+            {
+                text = "<color=\"black\">" + "Nesse primeiro desafio, você terá que encaixar as peças no lugar certo e escolher a fonte de calor correta para fazer " +
+                    "a máquina funcionar!" + "</color>";
+                UIManager.Instance.UpdatePlayButtons(0);
+                UIManager.Instance.LoadFirstScene();
+            }else if (scene.name.StartsWith("Second"))
+            {
+                UIManager.Instance.LoadSecondScene();
+                text = "<color=\"black\">" + "Nessa segunda fase, você terá que levar o trem até o fim do caminho!";
+            }
+
+            UIManager.Instance.UpdateStartLevelText(text);
+        }
     }
 
     private void OnDestroy()

@@ -10,10 +10,12 @@ public class PecaScript : MonoBehaviour
 
     public GameObject encaixe;
 
+    private PecaScript sceneCoal;
+
     public string nome;
 
-    private bool tocou;
-    public bool isRight, colado;
+    private bool tocou, isQuitting;
+    public bool isRight, colado, willDestroy, isBeingDragged;
 
     public float peca_x, peca_y, peca_z;
 
@@ -22,6 +24,11 @@ public class PecaScript : MonoBehaviour
     {
         tocou = false;
         colado = false;
+    }
+
+    private void OnEnable()
+    {
+        Application.quitting += SetApplicationQuitting;
     }
 
     // Update is called once per frame
@@ -34,12 +41,62 @@ public class PecaScript : MonoBehaviour
         }
         else
         {
-            if(tocou == true)
+            if(tocou)
             {
-                this.gameObject.transform.position = new Vector3(peca_x, peca_y, peca_z);
+                gameObject.transform.position = new Vector3(peca_x, peca_y, peca_z);
+                if (Input.GetMouseButtonUp(0) && willDestroy)
+                    Destroy(gameObject);
+            }
+            else
+            {
+                if (Input.GetMouseButtonUp(0) && willDestroy && isBeingDragged)
+                {
+                    UIManager.Instance.UpdateCoalsCounter(true);
+                    Destroy(gameObject);
+                }
             }
         }
- 
+
+        if(isBeingDragged && nome == "coal")
+        {
+            if(sceneCoal == null)
+            {
+                PecaScript[] sceneCoals = FindObjectsOfType<PecaScript>();
+
+                for (int i = 0; i < sceneCoals.Length; i++)
+                {
+                    if(sceneCoals[i] != this)
+                    {
+                        sceneCoal = sceneCoals[i];
+                    }
+                }
+            }
+
+            sceneCoal.isBeingDragged = false;
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (!isQuitting)
+        {
+            if (tocou)
+            {
+                if(nome == "coal")
+                {
+                    CoalOBJ coal = FindObjectOfType<CoalOBJ>();
+
+                    if (coal != null)
+                    {
+                        coal.UpdateQuantity(true);
+                    }
+                    else
+                    {
+                        GetComponent<Coal>().InstantiateCoal();
+                    }
+                }
+            }
+        }
     }
 
     void OnTriggerEnter2D(Collider2D collider)
@@ -75,7 +132,6 @@ public class PecaScript : MonoBehaviour
                 }
             }
         }
-        //print(collider.gameObject);
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -84,8 +140,14 @@ public class PecaScript : MonoBehaviour
         {
             colado = false;
             encaixe.GetComponent<EncaixeScript>().cheio = false;
-            encaixe.GetComponent<EncaixeScript>().SetSpriteAndQuestionMark(true);
+            if(nome != "coal")
+                encaixe.GetComponent<EncaixeScript>().SetSpriteAndQuestionMark(true);
             isRight = false;
         }
+    }
+
+    private void SetApplicationQuitting()
+    {
+        isQuitting = true;
     }
 }

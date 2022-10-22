@@ -65,10 +65,17 @@ public class PecaFonteScript : MonoBehaviour
         if (other.gameObject.layer == 7 && isGlued)
         {
             isGlued = false;
+            UIManager.Instance.text_Potencia.text = "<i>P</I>:";
             UIManager.Instance.texto_trabalho.text = "W:";
             UIManager.Instance.texto_Qq.text = "Qq:";
             UIManager.Instance.texto_Qf.text = "Qf:";
             UIManager.Instance.texto_N.text = "N:";
+
+            if (MachineManager.Instance.machineIsFunctioning)
+            {
+
+                MachineManager.Instance.StopMachine();
+            }
         }
     }
 

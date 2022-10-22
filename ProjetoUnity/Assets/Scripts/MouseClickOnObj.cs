@@ -28,7 +28,7 @@ public class MouseClickOnObj : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        cursorHotspot = new Vector2(cursorTexture.width / 2, cursorTexture.height /2);
+        cursorHotspot = new Vector2(0, 0);
         Cursor.SetCursor(cursorTexture, cursorHotspot,CursorMode.Auto);
     }
 
@@ -53,6 +53,13 @@ public class MouseClickOnObj : MonoBehaviour
             float _y = obj.transform.position.y - _mouse.y;
 
             _offset = new Vector2(_x, _y);
+            obj.GetComponent<PecaScript>().isBeingDragged = true;
+
+            if(obj.name.StartsWith("Coal"))
+            {
+                UIManager.Instance.UpdateCoalsCounter(false);
+                obj.GetComponent<Coal>().InstantiateClone();
+            }
         }
 
         if(_drag){
@@ -63,6 +70,8 @@ public class MouseClickOnObj : MonoBehaviour
             obj = null;
             _drag = false;
             _offset = new Vector2(0f, 0f);
+            if(obj != null)
+                obj.GetComponent<PecaScript>().isBeingDragged = false;
         }
     }
 }
