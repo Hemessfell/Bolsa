@@ -7,7 +7,7 @@ using TMPro;
 
 public class UIManager : MonoBehaviour
 {
-    [SerializeField] private GameObject popUpPanel, runMachineButton, trainUI;
+    [SerializeField] private GameObject popUpPanel, runMachineButton, trainUI, generalTexts, mainMenu;
     [SerializeField] private GameObject[] playButtons;
 
     public TextMeshProUGUI texto_trabalho, texto_Qq, texto_Qf, texto_N, text_Potencia, coals;
@@ -128,24 +128,41 @@ public class UIManager : MonoBehaviour
 
     public void LoadFirstScene()
     {
+        generalTexts.SetActive(true);
         runMachineButton.SetActive(true);
         fontesDeCalor.gameObject.SetActive(true);
         pecas.gameObject.SetActive(true);
         path.gameObject.SetActive(false);
         trainUI.SetActive(false);
         coals.gameObject.SetActive(false);
+        mainMenu.SetActive(false);
         pathSlider.value = 0.0f;
     }
 
     public void LoadSecondScene()
     {
+        generalTexts.SetActive(true);
         runMachineButton.SetActive(false);
         fontesDeCalor.gameObject.SetActive(false);
         pecas.gameObject.SetActive(false);
         trainUI.SetActive(true);
         path.gameObject.SetActive(true);
         coals.gameObject.SetActive(true);
+        mainMenu.SetActive(false);
         pathSlider.maxValue = pathSliderMaxValue;
+        pathSlider.value = 0.0f;
+    }
+
+    public void LoadMainMenu()
+    {
+        generalTexts.SetActive(false);
+        mainMenu.SetActive(true);
+        runMachineButton.SetActive(false);
+        fontesDeCalor.gameObject.SetActive(false);
+        pecas.gameObject.SetActive(false);
+        path.gameObject.SetActive(false);
+        trainUI.SetActive(false);
+        coals.gameObject.SetActive(false);
         pathSlider.value = 0.0f;
     }
 
@@ -164,5 +181,10 @@ public class UIManager : MonoBehaviour
         else
             currentCoalsAmount--;
         coals.text = currentCoalsAmount + "/" + maxCoalsAmount;
+    }
+
+    public void ExitGame()
+    {
+        Application.Quit();
     }
 }

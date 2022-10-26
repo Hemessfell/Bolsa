@@ -38,11 +38,17 @@ public class SceneLoadEvent : MonoBehaviour
 
     private void OnSceneLoad(Scene scene, LoadSceneMode loadSceneMode)
     {
+        if (scene.name == "MainMenu")
+        {
+            UIManager.Instance.LoadMainMenu();
+        }
+
         if (scene.name.Contains("Level"))
         {
             string text = "";
             UIManager.Instance.PlayButtonMethod(50);
 
+           
             if (scene.name.StartsWith("First"))
             {
                 text = "<color=\"black\">" + "Nesse primeiro desafio, você terá que encaixar as peças no lugar certo e escolher a fonte de calor correta para fazer " +
