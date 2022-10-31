@@ -49,10 +49,17 @@ public class PecaFonteScript : MonoBehaviour
 
             int valuesIndex = Random.Range(0, values.Length);
 
-            UIManager.Instance.texto_trabalho.text = values[valuesIndex].values[0];
-            UIManager.Instance.texto_Qq.text = values[valuesIndex].values[1];
-            UIManager.Instance.texto_Qf.text = values[valuesIndex].values[2];
-            UIManager.Instance.texto_N.text = values[valuesIndex].values[3];
+            UIManager.Instance.trabalhoTxt = values[valuesIndex].values[0];
+            UIManager.Instance.texto_trabalho.text = UIManager.Instance.texto_trabalho.transform.GetChild(0).GetComponent<EyeButton>().eyeIsOpen ? values[valuesIndex].values[0] : "W: --------";
+
+            UIManager.Instance.QqTxt = values[valuesIndex].values[1];
+            UIManager.Instance.texto_Qq.text = UIManager.Instance.texto_Qq.transform.GetChild(0).GetComponent<EyeButton>().eyeIsOpen ? values[valuesIndex].values[1] : "Qq: --------";
+
+            UIManager.Instance.QfTxt = values[valuesIndex].values[2];
+            UIManager.Instance.texto_Qf.text = UIManager.Instance.texto_Qf.transform.GetChild(0).GetComponent<EyeButton>().eyeIsOpen ? values[valuesIndex].values[2] : "Qf: --------";
+
+            UIManager.Instance.NTxt = values[valuesIndex].values[3];
+            UIManager.Instance.texto_N.text = UIManager.Instance.texto_N.transform.GetChild(0).GetComponent<EyeButton>().eyeIsOpen ? values[valuesIndex].values[3] : "N: --------";
 
             gameObject.transform.position = new Vector3(peca_x, peca_y, peca_z);
             tocou = true;
@@ -65,11 +72,13 @@ public class PecaFonteScript : MonoBehaviour
         if (other.gameObject.layer == 7 && isGlued)
         {
             isGlued = false;
-            UIManager.Instance.text_Potencia.text = "<i>P</I>:";
-            UIManager.Instance.texto_trabalho.text = "W:";
-            UIManager.Instance.texto_Qq.text = "Qq:";
-            UIManager.Instance.texto_Qf.text = "Qf:";
-            UIManager.Instance.texto_N.text = "N:";
+            UIManager.Instance.text_Potencia.text = "<i>P</I>: --------";
+            UIManager.Instance.texto_trabalho.text = "W: --------";
+            UIManager.Instance.texto_Qq.text = "Qq: --------";
+            UIManager.Instance.texto_Qf.text = "Qf: --------";
+            UIManager.Instance.texto_N.text = "N: --------";
+
+            UIManager.Instance.TurnTextIntoDots();
 
             if (MachineManager.Instance.machineIsFunctioning)
             {

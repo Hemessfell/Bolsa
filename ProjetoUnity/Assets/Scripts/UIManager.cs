@@ -17,6 +17,8 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] private float pathSliderMaxValue;
 
+    public string trabalhoTxt, QqTxt, QfTxt, NTxt;
+
     public bool canClickOnPieces, canUpdatePathSlider;
     private bool canClickOnPopUp;
 
@@ -50,6 +52,7 @@ public class UIManager : MonoBehaviour
         canClickOnPieces = true;
         currentCoalsAmount = maxCoalsAmount;
         coals.text = currentCoalsAmount + "/" + maxCoalsAmount;
+        TurnTextIntoDots();
     }
     #endregion
 
@@ -181,6 +184,14 @@ public class UIManager : MonoBehaviour
         else
             currentCoalsAmount--;
         coals.text = currentCoalsAmount + "/" + maxCoalsAmount;
+    }
+
+    public void TurnTextIntoDots()
+    {
+        trabalhoTxt = "--------";
+        QqTxt = "--------";
+        QfTxt = "--------";
+        NTxt = "--------";
     }
 
     public void ExitGame()

@@ -53,7 +53,9 @@ public class MouseClickOnObj : MonoBehaviour
             float _y = obj.transform.position.y - _mouse.y;
 
             _offset = new Vector2(_x, _y);
-            obj.GetComponent<PecaScript>().isBeingDragged = true;
+            PecaScript peca = obj.GetComponent<PecaScript>();
+            if(peca != null)
+                peca.isBeingDragged = true;
 
             if(obj.name.StartsWith("Coal"))
             {
