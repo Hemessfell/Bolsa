@@ -7,10 +7,10 @@ using TMPro;
 
 public class UIManager : MonoBehaviour
 {
-    [SerializeField] private GameObject popUpPanel, runMachineButton, trainUI, generalTexts, mainMenu;
+    [SerializeField] private GameObject popUpPanel, trainTimerPanel, runMachineButton, trainUI, generalTexts, mainMenu, nextSceneButton;
     [SerializeField] private GameObject[] playButtons;
 
-    public TextMeshProUGUI texto_trabalho, texto_Qq, texto_Qf, texto_N, text_Potencia, coals;
+    public TextMeshProUGUI texto_trabalho, texto_Qq, texto_Qf, texto_N, text_Potencia, coals, trainTimer;
     [SerializeField] TextMeshProUGUI fontesDeCalor, pecas, path;
 
     [SerializeField] private Slider pathSlider;
@@ -19,7 +19,7 @@ public class UIManager : MonoBehaviour
 
     public string trabalhoTxt, QqTxt, QfTxt, NTxt;
 
-    public bool canClickOnPieces, canUpdatePathSlider;
+    public bool canClickOnPieces, canUpdatePathSlider, canUpdateTrainTimer;
     private bool canClickOnPopUp;
 
     public int maxCoalsAmount;
@@ -59,6 +59,7 @@ public class UIManager : MonoBehaviour
     private void Update()
     {
         UpdatePathSlider();
+        UpdateTrainTimer();
     }
 
     public void PlayButtonMethod(int fontSize)
@@ -98,6 +99,7 @@ public class UIManager : MonoBehaviour
                 if (MachineManager.Instance.SourcePieceName() == "Carvão")
                 {
                     MachineManager.Instance.machineIsFunctioning = true;
+                    SetNextSceneButton(true);
                     text = "<color=\"green\">" + "A Máquina Ligou!" + "</color>";
                 }
                 else if (MachineManager.Instance.SourcePieceName() == "Lenha")
@@ -197,5 +199,52 @@ public class UIManager : MonoBehaviour
     public void ExitGame()
     {
         Application.Quit();
+    }
+
+    public void SetNextSceneButton(bool willActivate)
+    {
+        if (willActivate)
+        {
+            nextSceneButton.GetComponent<RectTransform>().DOLocalMove(new Vector3(-1018.0f, 465.0f), 0.50f);
+        }
+        else
+        {
+            nextSceneButton.GetComponent<RectTransform>().DOLocalMove(new Vector3(-1018.0f, 790.0f), 0.50f);
+        }
+
+        TurnTextIntoDots();
+    }
+
+    private void UpdateTrainTimer()
+    {
+        if (canUpdateTrainTimer)
+        {
+            trainTimer.text = Mathf.Floor(MachineManager.Instance.trainTimer / 60).ToString("00") + ":" + Mathf.FloorToInt(MachineManager.Instance.trainTimer % 60).ToString("00");
+            MachineManager.Instance.trainTimer -= Time.deltaTime;
+
+            if(MachineManager.Instance.trainTimer <= 0.0f)
+            {
+                SetTrainTimerPanel();
+                canUpdateTrainTimer = false;
+            }
+
+            MachineManager.Instance.trainTimer = Mathf.Clamp(MachineManager.Instance.trainTimer, 0.0f, MachineManager.Instance.trainTimerMax);
+        }
+    }
+
+    private void SetTrainTimerPanel()
+    {
+        trainTimerPanel.transform.DOLocalMoveY(-75.0f, 0.75f).SetUpdate(true);
+        trainTimerPanel.transform.DOLocalMoveY(0.0f, 0.25f).SetDelay(0.75f).SetUpdate(true);
+        canClickOnPieces = false;
+        canClickOnPopUp = true;
+    }
+
+    public void RetractTrainTimerPanel()
+    {
+        trainTimerPanel.transform.DOLocalMoveY(787.0f, 0.75f).OnComplete(() => canClickOnPieces = true).SetUpdate(true);
+        canClickOnPopUp = false;
+        Time.timeScale = 1.0f;
+        SceneLoader.Instnace.ReloadScene();
     }
 }

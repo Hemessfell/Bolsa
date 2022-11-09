@@ -47,4 +47,30 @@ public class SceneLoader : MonoBehaviour
             isLoading = true;
         }
     }
+
+    public void ReloadScene()
+    {
+        if (!isLoading)
+        {
+            Sequence sequence = DOTween.Sequence();
+
+            sequence.Append(group.DOFade(1.0f, 1.0f).OnComplete(() => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex))).AppendCallback(() => isLoading = false)
+                .Append(group.DOFade(0.0f, 1.0f));
+            isLoading = true;
+        }
+    }
+
+    public void LoadNextScene()
+    {
+        if (!isLoading)
+        {
+            Sequence sequence = DOTween.Sequence();
+
+            sequence.Append(group.DOFade(1.0f, 1.0f).OnComplete(() => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1))).AppendCallback(() => isLoading = false)
+                .Append(group.DOFade(0.0f, 1.0f));
+            isLoading = true;
+
+            UIManager.Instance.SetNextSceneButton(false);
+        }
+    }
 }

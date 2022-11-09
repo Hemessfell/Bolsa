@@ -13,6 +13,9 @@ public class MachineManager : MonoBehaviour
     public bool machineIsFunctioning;
     private bool canUpdatePathSlider;
 
+    public float trainTimerMax;
+    [HideInInspector] public float trainTimer;
+
     #region Singleton Logic
     private static MachineManager instance;
     public static MachineManager Instance

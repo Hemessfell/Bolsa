@@ -38,6 +38,8 @@ public class SceneLoadEvent : MonoBehaviour
 
     private void OnSceneLoad(Scene scene, LoadSceneMode loadSceneMode)
     {
+        UIManager.Instance.canUpdateTrainTimer = false;
+
         if (scene.name == "MainMenu")
         {
             UIManager.Instance.LoadMainMenu();
@@ -47,8 +49,8 @@ public class SceneLoadEvent : MonoBehaviour
         {
             string text = "";
             UIManager.Instance.PlayButtonMethod(50);
+            Time.timeScale = 0.0f;
 
-           
             if (scene.name.StartsWith("First"))
             {
                 text = "<color=\"black\">" + "Nesse primeiro desafio, você terá que encaixar as peças no lugar certo e escolher a fonte de calor correta para fazer " +
@@ -58,6 +60,8 @@ public class SceneLoadEvent : MonoBehaviour
             }else if (scene.name.StartsWith("Second"))
             {
                 UIManager.Instance.LoadSecondScene();
+                MachineManager.Instance.trainTimer = MachineManager.Instance.trainTimerMax;
+                UIManager.Instance.canUpdateTrainTimer = true;
                 text = "<color=\"black\">" + "Nessa segunda fase, você terá que levar o trem até o fim do caminho!";
             }
 
